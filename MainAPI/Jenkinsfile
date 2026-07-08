@@ -2,24 +2,20 @@
     agent any
 
     stages {
-        
         stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
 
-      
         stage('Docker Build') {
             steps {
                 script {
-                   
                     sh 'docker build -t MainAPI:latest .'
                 }
             }
         }
 
-       
         stage('Verify Image') {
             steps {
                 sh 'docker images | grep MainAPI'
