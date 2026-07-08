@@ -1,0 +1,29 @@
+﻿pipeline {
+    agent any
+
+    stages {
+        // ஸ்டெப் 1: GitHub-ல் இருந்து கோடை டவுன்லோட் செய்தல்
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        // ஸ்டெப் 2: டாக்கர் இமேஜ் பில்ட் செய்தல்
+        stage('Docker Build') {
+            steps {
+                script {
+                    // 'my-app-name' இடத்துல உங்க ஆப் பெயரை போட்டுக்கோங்க
+                    sh 'docker build -t MainAPI:latest .'
+                }
+            }
+        }
+
+        // ஸ்டெப் 3: இமேஜ் பில்ட் ஆகிடுச்சான்னு செக் செய்தல்
+        stage('Verify Image') {
+            steps {
+                sh 'docker images | grep MainAPI'
+            }
+        }
+    }
+}
