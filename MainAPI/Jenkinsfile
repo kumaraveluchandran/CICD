@@ -11,7 +11,7 @@
             steps {
                 echo '=== Fetching Source Code ==='
                 // நிஜமான ரெப்போசிட்டரி இருந்தால் கீழே உள்ள கமாண்டை பயன்படுத்தலாம்
-                // git url: 'https://github.com/your-username/no-search-tsr.git', branch: 'main'
+                 git url: 'https://github.com/kumaraveluchandran/CICD.git', branch: 'master'
                 echo 'Code checkout simulation successful.'
             }
         }
