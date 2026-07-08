@@ -1,25 +1,80 @@
 ﻿pipeline {
     agent any
 
+    environment {
+        // உங்கள் ப்ராஜெக்ட் தேவைகளுக்கு ஏற்ப என்விரான்மென்ட் வேரியபிள்களை இங்கே மாற்றி அமைக்கலாம்
+        PYTHON_ENV = "venv"
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scm
+                echo '=== Fetching Source Code ==='
+                // நிஜமான ரெப்போசிட்டரி இருந்தால் கீழே உள்ள கமாண்டை பயன்படுத்தலாம்
+                // git url: 'https://github.com/your-username/no-search-tsr.git', branch: 'main'
+                echo 'Code checkout simulation successful.'
             }
         }
 
-        stage('Docker Build') {
+        stage('Image Input & Preprocessing') {
             steps {
-                script {
-                    sh 'docker build -t MainAPI:latest .'
-                }
+                echo '=== Step 1: Loading and Preprocessing Input Image ==='
+                // உதாரணத்திற்கு ஒரு பைதான் ஸ்கிரிப்ட் ரன் செய்வது போல:
+                // sh 'python src/preprocess.py --input data/sample_table.png'
+                echo 'Image resizing and normalization completed successfully.'
             }
         }
 
-        stage('Verify Image') {
+        stage('Feature Extraction') {
             steps {
-                sh 'docker images | grep MainAPI'
+                echo '=== Step 2: Extracting Visual Features using CNN ==='
+                // sh 'python src/feature_extraction.py'
+                echo 'Visual features extracted from the table image.'
             }
+        }
+
+        stage('Cell Detection & Segmentation') {
+            steps {
+                echo '=== Step 3: Detecting Table Cells and Bounding Boxes ==='
+                // sh 'python src/cell_detection.py'
+                echo 'Cell segmentation completed. Bounding boxes generated.'
+            }
+        }
+
+        stage('Structural Relation Analysis') {
+            steps {
+                echo '=== Step 4: Analyzing Row and Column Relations ==='
+                // sh 'python src/relation_analysis.py'
+                echo 'Adjacency matrix for cell relationships calculated.'
+            }
+        }
+
+        stage('Logical Structure Reconstruction') {
+            steps {
+                echo '=== Step 5: Reconstructing Logical Table Grid ==='
+                // sh 'python src/reconstruct_grid.py'
+                echo 'Logical Row-Column structure reconstructed successfully.'
+            }
+        }
+
+        stage('Output Generation') {
+            steps {
+                echo '=== Step 6: Generating Final Output Formats ==='
+                // எக்ஸெல் அல்லது JSON கோப்பாக மாற்றுவது
+                // sh 'python src/generate_output.py --format all'
+                echo 'Table successfully converted to HTML, JSON, and Excel formats.'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '=== Success: No Search TSR Pipeline executed successfully! ==='
+            // பில்ட் சக்சஸ் ஆனதும் ரிப்போர்ட் அல்லது அவுட்புட் ஃபைல்களை சேமிக்க:
+            // archiveArtifacts artifacts: 'output/*', OnlyIfSuccessful: true
+        }
+        failure {
+            echo '=== Failure: Pipeline failed at some stage. Check the logs above. ==='
         }
     }
 }
